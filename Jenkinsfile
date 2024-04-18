@@ -37,26 +37,17 @@ pipeline {
             }
         }
 
-//        stage("provision server"){
-//            environment{
-//                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
-//                AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
-////                    TF_VAR_env_prefix = 'test' #the way to change a terraform var inside jenkins file.
-//            }
-//            steps{
-//                echo "provisioning aws server(s)."
-//                script{
-//                    dir('terraform'){
-//                        sh "terraform init"
-//                        sh "terraform apply -var-file terraformVars.tfvars --auto-approve"
-//                        SERVER_IP = sh(
-//                                script: "terraform output myapp_server_ip",
-//                                returnStdout: true
-//                        ).trim()
-//                    }
-//                }
-//            }
-//        }
+        stage("provision dev env"){
+            steps{
+                echo "provisioning EKS Cluster."
+                script{
+                    dir('terraform'){
+                        sh "terraform init"
+                        sh "terraform apply --auto-approve"
+                    }
+                }
+            }
+        }
 //        stage("deploy") {
 //            environment{
 //                DOCKER_HUB_CREDITS = credentials("dockerHubCredit") //now DOCKER_HUB_CREDITS_USR and DOCKER_HUB_CREDITS_PSW will have user and pass.
