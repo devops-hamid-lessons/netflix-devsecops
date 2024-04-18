@@ -1,5 +1,5 @@
 #!groovy
-import groovy.console.ui.AstBrowser._closure1
+
 
 @Library("jenkinsSharedLib")
 def gv
