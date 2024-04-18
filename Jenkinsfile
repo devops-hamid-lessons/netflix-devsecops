@@ -1,46 +1,41 @@
 #! /usr/bin/env groovy
 
+//test branch
 @Library("jenkinsSharedLib")
 def gv
 pipeline {
     agent any
-    stages{
-        stage("initial stage"){
-            steps {
-                echo "this is only test"
-            }
-        }
-    }
+
 //    tools {
 //        maven 'Maven'
 //    }
-//
-//    environment {
-//        IMAGE_NAME = "grahamtty/netflix"
-//        IMAGE_VERSION = "latest"
-//        AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
-//        AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
-//    }
-//    stages {
-//
+
+    environment {
+        IMAGE_NAME = "grahamtty/netflix"
+        IMAGE_VERSION = "latest"
+        AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
+        AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
+    }
+    stages {
+
 //        stage("build jar") {
 //            steps {
 //                echo "building the application..."
 //                sh 'mvn clean package'
 //            }
 //        }
-//
-//        stage("build image") {
-//            steps {
-//                echo "building docker image..."
-//                script {
-//                    buildDockerImage("$env.IMAGE_NAME:$env.IMAGE_VERSION")
-//                    loginDocker("dockerHubCredit")
-//                    pushDockerImage("$env.IMAGE_NAME:$env.IMAGE_VERSION")
-//                }
-//            }
-//        }
-//
+
+        stage("Docker Build & Push"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockercredit', toolName: 'docker'){
+                        sh "docker build --build-arg TMDB_V3_API_KEY=0285a5a87919af58f3df89de4348255f  -t ${env.IMAGE_NAME}:${env.IMAGE_VERSION} ."
+                        sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_VERSION}"
+                    }
+                }
+            }
+        }
+
 //        stage("provision server"){
 //            environment{
 //                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
@@ -84,5 +79,5 @@ pipeline {
 //        }
 //
 //
-//    }
+    }
 }
