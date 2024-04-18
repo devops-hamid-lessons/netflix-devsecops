@@ -37,18 +37,33 @@ pipeline {
 //            }
 //        }
 
-        stage("provision dev env"){
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
-                AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
-            }
+//        stage("provision dev env"){
+//            environment {
+//                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
+//                AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
+//            }
+//            steps{
+//                echo "provisioning EKS Cluster."
+//                script{
+//                    dir('terraform'){
+//                        sh "terraform init"
+//                        sh "terraform apply --auto-approve"
+//                    }
+//                }
+//            }
+//        }
+        stage("check deployment"){
             steps{
-                echo "provisioning EKS Cluster."
-                script{
-                    dir('terraform'){
-                        sh "terraform init"
-                        sh "terraform apply --auto-approve"
-                    }
+                script {
+                    sh "kubectl get node"
+                }
+            }
+        }
+        stage("install argo cd"){
+            steps{
+                script {
+                    sh "kubectl create namespace argocd"
+                    sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml"
                 }
             }
         }
