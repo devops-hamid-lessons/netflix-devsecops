@@ -28,7 +28,7 @@ pipeline {
         stage("Docker Build & Push"){
             steps{
                 script{
-                    withCredentials([usernamePassword(credentialsId: dockercredit, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockercredit', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                         sh "echo ${env.PASS} | docker login -u ${env.USER} --password-stdin "
                         sh "docker build --build-arg TMDB_V3_API_KEY=0285a5a87919af58f3df89de4348255f  -t ${env.IMAGE_NAME}:${env.IMAGE_VERSION} ."
                         sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_VERSION}"
