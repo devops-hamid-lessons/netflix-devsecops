@@ -25,19 +25,23 @@ pipeline {
 //            }
 //        }
 
-        stage("Docker Build & Push"){
-            steps{
-                script{
-                    withCredentials([usernamePassword(credentialsId: 'dockercredit', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                        sh "echo ${env.PASS} | docker login -u ${env.USER} --password-stdin "
-                        sh "docker build --build-arg TMDB_V3_API_KEY=0285a5a87919af58f3df89de4348255f  -t ${env.IMAGE_NAME}:${env.IMAGE_VERSION} ."
-                        sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_VERSION}"
-                    }
-                }
-            }
-        }
+//        stage("Docker Build & Push"){
+//            steps{
+//                script{
+//                    withCredentials([usernamePassword(credentialsId: 'dockercredit', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+//                        sh "echo ${env.PASS} | docker login -u ${env.USER} --password-stdin "
+//                        sh "docker build --build-arg TMDB_V3_API_KEY=0285a5a87919af58f3df89de4348255f  -t ${env.IMAGE_NAME}:${env.IMAGE_VERSION} ."
+//                        sh "docker push ${env.IMAGE_NAME}:${env.IMAGE_VERSION}"
+//                    }
+//                }
+//            }
+//        }
 
         stage("provision dev env"){
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id') //this is like exporting params. so it is enough to automatically login aws.
+                AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
+            }
             steps{
                 echo "provisioning EKS Cluster."
                 script{
