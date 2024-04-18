@@ -1,5 +1,4 @@
-#!groovy
-
+#! /usr/bin/env groovy
 
 @Library("jenkinsSharedLib")
 def gv
