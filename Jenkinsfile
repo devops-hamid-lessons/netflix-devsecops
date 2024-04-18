@@ -65,8 +65,8 @@ pipeline {
                 script {
                     sh "kubectl create namespace argocd"
                     sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml"
-                    sh "curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64"
-                    sh "chmod +x /usr/local/bin/argocd"
+//                    sh "curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64"
+//                    sh "chmod +x /usr/local/bin/argocd"
                 }
             }
         }
